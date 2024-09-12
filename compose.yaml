@@ -1,0 +1,45 @@
+version: '3'
+services:
+  logservice1:
+    build: .
+    ports:
+      - "35001:8080"
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_DATA_MONGODB_URI=mongodb://db:27017/yourdatabase
+
+  logservice2:
+    build: .
+    ports:
+      - "35002:8080"
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_DATA_MONGODB_URI=mongodb://db:27017/yourdatabase
+
+  logservice3:
+    build: .
+    ports:
+      - "35003:8080"
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_DATA_MONGODB_URI=mongodb://db:27017/yourdatabase
+
+  db:
+    image: mongo:3.6.1
+    container_name: db
+    volumes:
+      - mongodb:/data/db
+      - mongodb_config:/data/configdb
+    ports:
+      - "27017:27017"
+
+  loadbalancer:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+
+volumes:
+  mongodb:
+  mongodb_config:
